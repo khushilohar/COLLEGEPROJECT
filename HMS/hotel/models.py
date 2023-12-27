@@ -1,5 +1,6 @@
 from django.db import models
 from django.conf import settings
+from django.urls import reverse_lazy
 
 
 # Create your models here.
@@ -8,7 +9,7 @@ class Room(models.Model):
     room_categories = (
         ("AC", "AC"),
         ("NON-AC", "NON-AC"),
-        ("DEL", "DELUXE"),
+        ("DELUXE", "DELUXE"),
         ("KING", "KING"),
         ("QUEEN", "QUEEN")
     )
@@ -29,3 +30,11 @@ class Booking(models.Model):
 
     def __str__(self):
         return f'{self.user} has booked {self.room} from {self.check_in} to {self.check_out}'
+
+    def get_room_category(str, self):
+        room_categories = dict(self.room.room_categories).get(self.room.category)
+        room_category = room_categories.get(self.room.category)
+        return room_category
+
+    def get_cancel_booking_url(self):
+        return reverse_lazy('hotel:CancelBookingView', args=[self.pk, ])
